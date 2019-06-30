@@ -1,0 +1,46 @@
+1. CRUD new table related other
+2. documentation with swagger
+3. learn how to upload image
+4.
+
+// vars := mux.Vars(r) <-- untuk mengambil kalimat pada API
+// id, _ := strconv.Atoi(vars["id"]) <-- untuk mengubah ID yang ada di API ke string
+
+account := model.Account{} <---bikin model
+	decoder := json.NewDecoder(r.Body)   <---  ambl jadi decode
+	if err := decoder.Decode(&account); err != nil { <---- di decode kemana &account
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	defer r.Body.Close()
+<---- baru bisa di ubah isi dari account
+
+##status berhasil 
+1.StatusCreated -->
+2.StatusOK -->
+3.StatusNoContent --> 201 berhasil menghapus
+##status error yg digunakan
+1. StatusBadRequest --> 400 
+2. StatusInternalServerError -->
+3. StatusNotFound -->
+
+1. test semua seller test case (done)
+2. pecahin 1 1 yg harus dibuat 
+3.  a. payment,
+    b. invoice,
+    c. transaction, // done
+    d. product // ocee
+4.  a. buyer,  // done
+    b. transaction detail, //done
+    c. (status(invoice, transaction,payment)) <-- submain
+5. upload gambar
+6. documentation with swagger
+    a. buat model di swagger
+    b. buat API nya dsna
+    c. test API
+7. email verification
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZF91c2VyIjo1fQ.x9LOPYMWxThR3y06d5vAd7qTN6jkPNDCA59JN4NGuXM
+
+1. buat dokumentasi swagger

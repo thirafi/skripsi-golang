@@ -148,7 +148,7 @@ func Confirmation(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-
+	user.VerifyEmail = true
 	if err := db.Save(&user).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -171,11 +171,7 @@ func getUserOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request
 }
 func getUserOr404email(db *gorm.DB, email string, w http.ResponseWriter, r *http.Request) *model.Account {
 	user := model.Account{}
-	// ud, err := strconv.ParseUint(id, 10, 64)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// ad := uint(ud)
+
 	if err := db.Where("email=?", email).First(&user).Error; err != nil {
 		respondError(w, http.StatusNotFound, err.Error())
 		return nil
