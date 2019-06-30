@@ -55,6 +55,7 @@ type BuyerModel struct {
 	Alamat        string
 	KodePos       int
 	Penerima      string
+	Invoices      []InvoiceModel `gorm:"ForeignKey:BuyyerID" json:"invoices"`
 }
 type ProductModel struct {
 	gorm.Model
@@ -90,14 +91,36 @@ type TransactionDetailModel struct {
 	Note          string
 }
 
+type InvoiceModel struct {
+	gorm.Model
+	TransactionID  uint `json:"transaction_id"`
+	BuyyerID       uint `json:"buyyer_id"`
+	PaymentID      uint `json:"payment_id"`
+	InvoiceStatus  int
+	InvoiceNo      string
+	Discount       int
+	PaymentMethod  string
+	PaymentReceipt string
+	UniqueCode     int
+}
+
+type PaymentModel struct {
+	gorm.Model
+	NamaBank   string
+	NoRekening int
+	AtasNama   string
+}
+
 func DBMigrate(db *gorm.DB) *gorm.DB {
-	db.AutoMigrate(&Account{}, SellerModel{}, BuyerModel{}, ProductModel{}, TransactionModel{}, TransactionDetailModel{})
+	db.AutoMigrate(&Account{}, SellerModel{}, BuyerModel{}, ProductModel{}, TransactionModel{}, TransactionDetailModel{}, InvoiceModel{}, PaymentModel{})
 	db.Model(&SellerModel{}).AddForeignKey("account_id", "accounts(id)", "RESTRICT", "RESTRICT")
 	db.Model(&BuyerModel{}).AddForeignKey("account_id", "accounts(id)", "RESTRICT", "RESTRICT")
 	db.Model(&ProductModel{}).AddForeignKey("seller_id", "seller_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&TransactionModel{}).AddForeignKey("seller_id", "seller_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&TransactionDetailModel{}).AddForeignKey("transaction_id", "transaction_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&TransactionDetailModel{}).AddForeignKey("product_id", "product_models(id)", "RESTRICT", "RESTRICT")
-
+	db.Model(&InvoiceModel{}).AddForeignKey("transaction_id", "transaction_models(id)", "RESTRICT", "RESTRICT")
+	db.Model(&InvoiceModel{}).AddForeignKey("buyyer_id", "buyer_models(id)", "RESTRICT", "RESTRICT")
+	db.Model(&InvoiceModel{}).AddForeignKey("payment_id", "payment_models(id)", "RESTRICT", "RESTRICT")
 	return db
 }

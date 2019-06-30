@@ -73,14 +73,26 @@ func (a *App) setRouters() {
 	a.Delete("/transaction/delete/{id}", a.DeleteTransaction)
 	a.Get("/transactions", a.GetAllTransactions)
 	a.Get("/transaction/seller/{id_seller}", a.GetTransactionBySeller)
-	//routing for handling Transaction
+	//routing for handling Transaction detail
 	a.Post("/transactiondetail/post", a.CreateTransactionDetail)
 	a.Get("/transactiondetail/{id}", a.GetTransactionDetail)
 	a.Put("/transactiondetail/edit/{id}", a.UpdateTransactionDetail)
 	a.Delete("/transactiondetail/delete/{id}", a.DeleteTransactionDetail)
 	a.Get("/transactiondetail/transaction/{id_transaction}", a.GetTransactionDetailByTransaction)
 	a.Get("/transactiondetails", a.GetAllTransactionDetails)
-
+	//routing for handling Invoice
+	a.Post("/invoice/post", a.CreateInvoice)
+	a.Get("/invoice/{id}", a.GetInvoice)
+	a.Put("/invoice/edit/{id}", a.UpdateInvoice)
+	a.Delete("/invoice/delete/{id}", a.DeleteInvoice)
+	a.Get("/invoice/buyer/{id_buyer}", a.GetInvoiceByBuyer)
+	a.Get("/invoices", a.GetAllInvoices)
+	//routing for handling Payment
+	a.Post("/payment/post", a.CreatePayment)
+	a.Get("/payment/{id}", a.GetPayment)
+	a.Put("/payment/edit/{id}", a.UpdatePayment)
+	a.Delete("/payment/delete/{id}", a.DeletePayment)
+	a.Get("/payments", a.GetAllPayments)
 }
 
 // Wrap the router for GET method
@@ -259,6 +271,54 @@ func (a *App) GetAllTransactionDetails(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) GetTransactionDetailByTransaction(w http.ResponseWriter, r *http.Request) {
 	handler.GetTransactionDetailByTransaction(a.DB, w, r)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Handlers to manage Invoice Data
+func (a *App) CreateInvoice(w http.ResponseWriter, r *http.Request) {
+	handler.CreateInvoice(a.DB, w, r)
+}
+
+func (a *App) GetInvoice(w http.ResponseWriter, r *http.Request) {
+	handler.GetInvoice(a.DB, w, r)
+}
+
+func (a *App) UpdateInvoice(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateInvoice(a.DB, w, r)
+}
+
+func (a *App) DeleteInvoice(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteInvoice(a.DB, w, r)
+}
+
+func (a *App) GetAllInvoices(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllInvoices(a.DB, w, r)
+}
+
+func (a *App) GetInvoiceByBuyer(w http.ResponseWriter, r *http.Request) {
+	handler.GetInvoiceByBuyer(a.DB, w, r)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Handlers to manage Payment Data
+func (a *App) CreatePayment(w http.ResponseWriter, r *http.Request) {
+	handler.CreatePayment(a.DB, w, r)
+}
+
+func (a *App) GetPayment(w http.ResponseWriter, r *http.Request) {
+	handler.GetPayment(a.DB, w, r)
+}
+
+func (a *App) UpdatePayment(w http.ResponseWriter, r *http.Request) {
+	handler.UpdatePayment(a.DB, w, r)
+}
+
+func (a *App) DeletePayment(w http.ResponseWriter, r *http.Request) {
+	handler.DeletePayment(a.DB, w, r)
+}
+
+func (a *App) GetAllPayments(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllPayments(a.DB, w, r)
 }
 
 // Run the app on it's router

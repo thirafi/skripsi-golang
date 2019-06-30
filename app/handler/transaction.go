@@ -110,6 +110,5 @@ func getTransactionOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.
 		respondError(w, http.StatusNotFound, err.Error())
 		return nil
 	}
-	fmt.Println("bisa ga nih,id = " + transaction.TransactionUuid)
 	return &transaction
 }
