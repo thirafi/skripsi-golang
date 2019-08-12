@@ -72,8 +72,8 @@ func JwtAuthentication(next http.Handler) http.Handler {
 		}
 
 		//Everything went well, proceed with the request and set the caller to the user retrieved from the parsed token
-		fmt.Sprintf("User %", tk.Id_user) //Useful for monitoring
-		ctx := context.WithValue(r.Context(), "user", tk.Id_user)
+		fmt.Println("User id", tk.Id_user) //Useful for monitoring
+		ctx := context.WithValue(r.Context(), "User", tk.Id_user)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r) //proceed in the middleware chain!
 	})

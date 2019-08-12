@@ -77,6 +77,22 @@ func DeleteBuyer(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusNoContent, nil)
 }
 
+func GetAddressByUser(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	userID := vars["id"]
+	user := getUserOr404(db, userID, w, r)
+	if user == nil {
+		return
+	}
+	address := model.BuyerModel{}
+	if err := db.Where("account_id=?", userID).First(&address).Error; err != nil {
+		respondError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	respondJSON(w, http.StatusOK, address)
+}
+
 func getBuyerOr404(db *gorm.DB, id string, w http.ResponseWriter, r *http.Request) *model.BuyerModel {
 	buyer := model.BuyerModel{}
 	ud, err := strconv.ParseUint(id, 10, 64)

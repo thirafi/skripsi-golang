@@ -20,6 +20,13 @@ func GetAllUsers(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, users)
 }
 
+func UploadUser(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	product := "user"
+	linkimage := UploadImage(w, r, product)
+
+	respondJSON(w, http.StatusOK, linkimage)
+}
+
 func CreateUser(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	user := model.Account{}
 
@@ -142,12 +149,7 @@ func Confirmation(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	if user == nil {
 		return
 	}
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&user); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	defer r.Body.Close()
+
 	user.VerifyEmail = true
 	if err := db.Save(&user).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())

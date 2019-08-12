@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"time"
+
 	"../model"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -19,12 +21,20 @@ func CreateInvoice(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-
+	t := time.Now()
+	invoice.InvoiceNo = fmt.Sprintf("DQ%d%d%d%d", t.Year(), t.Hour(), t.Second(), t.Minute())
 	if err := db.Save(&invoice).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	respondJSON(w, http.StatusCreated, invoice)
+}
+
+func UploadInvoice(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	product := "invoice"
+	linkimage := UploadImage(w, r, product)
+
+	respondJSON(w, http.StatusOK, linkimage)
 }
 
 func GetInvoice(db *gorm.DB, w http.ResponseWriter, r *http.Request) {

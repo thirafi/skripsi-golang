@@ -28,6 +28,13 @@ func CreateSeller(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusCreated, seller)
 }
 
+func UploadSeller(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	product := "seller"
+	linkimage := UploadImage(w, r, product)
+
+	respondJSON(w, http.StatusOK, linkimage)
+}
+
 func GetSeller(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 

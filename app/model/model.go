@@ -32,10 +32,10 @@ type Account struct {
 type SellerModel struct {
 	gorm.Model
 	AccountID    uint   `gorm:"unique" json:"account_id"`
-	Username     string `gorm:"unique"`
-	Alamat       string
+	Username     string `gorm:"unique"` //wajib
+	Alamat       string //wajib
 	Logo         string
-	Kodepos      int
+	Kodepos      int //wajib
 	NamaBank     string
 	PemilikBank  string
 	NoRekening   string
@@ -85,6 +85,9 @@ type TransactionDetailModel struct {
 	gorm.Model
 	TransactionID uint `json:"transaction_id"`
 	ProductID     uint `json:"product_id"`
+	BoxesID       uint `json:"boxes_id"`
+	BoxpaperID    uint `json:"boxpaper_id"`
+	RibbonID      uint `json:"ribbon_id"`
 	Quantity      int
 	ItemPrice     int
 	TextCard      string
@@ -111,14 +114,44 @@ type PaymentModel struct {
 	AtasNama   string
 }
 
+type BoxesModel struct {
+	gorm.Model
+	Code       string
+	Name       string
+	BoxPrice   int
+	Length     int
+	Width      int
+	Height     int
+	BoxPicture string
+}
+
+type BoxpaperModel struct {
+	gorm.Model
+	Code             string
+	Name             string
+	BoxpapperPrice   int
+	BoxpapperPicture string
+}
+
+type RibbonModel struct {
+	gorm.Model
+	Code          string
+	Name          string
+	RibbonPrice   int
+	RibbonPicture string
+}
+
 func DBMigrate(db *gorm.DB) *gorm.DB {
-	db.AutoMigrate(&Account{}, SellerModel{}, BuyerModel{}, ProductModel{}, TransactionModel{}, TransactionDetailModel{}, InvoiceModel{}, PaymentModel{})
+	db.AutoMigrate(&Account{}, SellerModel{}, BuyerModel{}, ProductModel{}, TransactionModel{}, TransactionDetailModel{}, InvoiceModel{}, PaymentModel{}, BoxesModel{}, BoxpaperModel{}, RibbonModel{})
 	db.Model(&SellerModel{}).AddForeignKey("account_id", "accounts(id)", "RESTRICT", "RESTRICT")
 	db.Model(&BuyerModel{}).AddForeignKey("account_id", "accounts(id)", "RESTRICT", "RESTRICT")
 	db.Model(&ProductModel{}).AddForeignKey("seller_id", "seller_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&TransactionModel{}).AddForeignKey("seller_id", "seller_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&TransactionDetailModel{}).AddForeignKey("transaction_id", "transaction_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&TransactionDetailModel{}).AddForeignKey("product_id", "product_models(id)", "RESTRICT", "RESTRICT")
+	db.Model(&TransactionDetailModel{}).AddForeignKey("boxes_id", "boxes_models(id)", "RESTRICT", "RESTRICT")
+	db.Model(&TransactionDetailModel{}).AddForeignKey("boxpaper_id", "boxpaper_models(id)", "RESTRICT", "RESTRICT")
+	db.Model(&TransactionDetailModel{}).AddForeignKey("ribbon_id", "ribbon_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&InvoiceModel{}).AddForeignKey("transaction_id", "transaction_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&InvoiceModel{}).AddForeignKey("buyyer_id", "buyer_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&InvoiceModel{}).AddForeignKey("payment_id", "payment_models(id)", "RESTRICT", "RESTRICT")

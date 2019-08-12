@@ -24,15 +24,6 @@ account := model.Account{} <---bikin model
 2. StatusInternalServerError -->
 3. StatusNotFound -->
 
-1. test semua seller test case (done)
-2. pecahin 1 1 yg harus dibuat 
-3.  a. payment,
-    b. invoice,
-    c. transaction, // done
-    d. product // ocee
-4.  a. buyer,  // done
-    b. transaction detail, //done
-    c. (status(invoice, transaction,payment)) <-- submain
 5. upload gambar
 6. documentation with swagger
     a. buat model di swagger
@@ -41,6 +32,30 @@ account := model.Account{} <---bikin model
 7. email verification
 
 
+10/08/2019
+user/confirmation/:id
+/ user / resendverification
+/ product /by_vendor/:id_vendor
+(guest)
+/ pencarian / :value (guest)
+/ transaction / arrived /:id (finished)
+/ transaction /by_seller/:id_seller
+/ transaction /by_user/:id_user
+/ transdetail /chart/ :id_user
+/ invoice /post (generate invoice)
+/ invoice /order /:id_ buyyer
+/ address /user/:id
+/ seller /confirmation/:id
+
+
+
+
+
+
+
+
+
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZF91c2VyIjo1fQ.x9LOPYMWxThR3y06d5vAd7qTN6jkPNDCA59JN4NGuXM
 
 1. buat dokumentasi swagger
+https://inspector.swagger.io/builder

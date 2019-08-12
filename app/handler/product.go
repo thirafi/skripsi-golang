@@ -38,6 +38,13 @@ func GetProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, product)
 }
 
+func UploadProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	product := "product"
+	linkimage := UploadImage(w, r, product)
+
+	respondJSON(w, http.StatusOK, linkimage)
+}
+
 func UpdateProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -63,7 +70,6 @@ func UpdateProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 func DeleteProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-
 	id := vars["id"]
 	product := getProductOr404(db, id, w, r)
 	if product == nil {
@@ -77,6 +83,14 @@ func DeleteProduct(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllProducts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	// vars := mux.Vars(r)
+
+	// fmt.Printf(string(mapB))
+	// ctx := r.Context()
+	mapB, _ := json.Marshal(r.Context().Value("User"))
+	// r.Value("key4")
+	fmt.Println("ada apa? " + string(mapB))
+
 	products := []model.ProductModel{}
 	db.Find(&products)
 	respondJSON(w, http.StatusOK, products)
@@ -93,6 +107,22 @@ func GetProductBySeller(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("bisa ga nih,id = " + seller.Username)
 	products := []model.ProductModel{}
 	if err := db.Model(&seller).Association("Products").Find(&products).Error; err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondJSON(w, http.StatusOK, products)
+}
+
+func Pencarian(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	search := vars["key"]
+	products := []model.ProductModel{}
+	awal := fmt.Sprintf("%%%s", search)
+	tengah := fmt.Sprintf("%%%s%%", search)
+	akhir := fmt.Sprintf("%s%%", search)
+	fmt.Println(awal, tengah, akhir)
+	if err := db.Where("nama LIKE ?", awal).Or("nama LIKE ?", tengah).Or("nama LIKE ?", akhir).Order("terjual desc").Order("dilihat desc").Find(&products).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

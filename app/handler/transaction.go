@@ -38,6 +38,22 @@ func GetTransaction(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, transaction)
 }
 
+func ProductArrived(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	transaction := getTransactionOr404(db, id, w, r)
+	if transaction == nil {
+		return
+	}
+
+	transaction.TransactionStatus = 2
+	if err := db.Save(&transaction).Error; err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondJSON(w, http.StatusOK, transaction)
+}
+
 func UpdateTransaction(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 

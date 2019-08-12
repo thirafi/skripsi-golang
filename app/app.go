@@ -41,24 +41,28 @@ func (a *App) setRouters() {
 	//routing for handling user
 	a.Get("/users", a.GetAllUsers)
 	// a.Post("/users/post", a.CreateUser)
-	a.Get("/users/{id}", a.GetUser)
-	a.Put("/users/edit/{id}", a.UpdateUser)
-	a.Delete("/users/delete/{id}", a.DeleteUser)
+	a.Get("/user/{id}", a.GetUser)
+	a.Put("/user/edit/{id}", a.UpdateUser)
+	a.Delete("/user/delete/{id}", a.DeleteUser)
 	a.Post("/login", a.Login)
 	a.Post("/register", a.Register)
 	a.Put("/users/confirmation/{id}", a.Confirmation)
 	a.Get("/", a.HelloWorld)
+	a.Post("/user/upload", a.UploadUser)
+
 	// a.Get("/account/{email}", a.GetAllAccount)
 	//routing for handling seller
 	a.Post("/seller/post", a.CreateSeller)
 	a.Get("/seller/{id}", a.GetSeller)
 	a.Put("/seller/edit/{id}", a.UpdateSeller)
 	a.Delete("/seller/delete/{id}", a.DeleteSeller)
+	a.Post("/seller/upload", a.UploadSeller)
 	//routing for handling buyer
-	a.Post("/buyer/post", a.CreateBuyer)
-	a.Get("/buyer/{id}", a.GetBuyer)
-	a.Put("/buyer/edit/{id}", a.UpdateBuyer)
-	a.Delete("/buyer/delete/{id}", a.DeleteBuyer)
+	a.Post("/address/post", a.CreateBuyer)
+	a.Get("/address/{id}", a.GetBuyer)
+	a.Put("/address/edit/{id}", a.UpdateBuyer)
+	a.Delete("/address/delete/{id}", a.DeleteBuyer)
+	a.Get("/address/user/{id}", a.GetAddressByUser)
 	//routing for handling Product
 	a.Post("/product/post", a.CreateProduct)
 	a.Get("/product/{id}", a.GetProduct)
@@ -66,12 +70,15 @@ func (a *App) setRouters() {
 	a.Delete("/product/delete/{id}", a.DeleteProduct)
 	a.Get("/products", a.GetAllProducts)
 	a.Get("/product/seller/{id_seller}", a.GetProductBySeller)
+	a.Post("/product/upload", a.UploadProduct)
+	a.Get("/pencarian/{key}", a.Pencarian)
 	//routing for handling Transaction
 	a.Post("/transaction/post", a.CreateTransaction)
 	a.Get("/transaction/{id}", a.GetTransaction)
 	a.Put("/transaction/edit/{id}", a.UpdateTransaction)
 	a.Delete("/transaction/delete/{id}", a.DeleteTransaction)
 	a.Get("/transactions", a.GetAllTransactions)
+	a.Put("/transaction/productarrived/{id}", a.ProductArrived)
 	a.Get("/transaction/seller/{id_seller}", a.GetTransactionBySeller)
 	//routing for handling Transaction detail
 	a.Post("/transactiondetail/post", a.CreateTransactionDetail)
@@ -85,14 +92,36 @@ func (a *App) setRouters() {
 	a.Get("/invoice/{id}", a.GetInvoice)
 	a.Put("/invoice/edit/{id}", a.UpdateInvoice)
 	a.Delete("/invoice/delete/{id}", a.DeleteInvoice)
-	a.Get("/invoice/buyer/{id_buyer}", a.GetInvoiceByBuyer)
+	a.Get("/invoice/order/{id_buyer}", a.GetInvoiceByBuyer)
 	a.Get("/invoices", a.GetAllInvoices)
+	a.Post("/invoice/upload", a.UploadInvoice)
 	//routing for handling Payment
 	a.Post("/payment/post", a.CreatePayment)
 	a.Get("/payment/{id}", a.GetPayment)
 	a.Put("/payment/edit/{id}", a.UpdatePayment)
 	a.Delete("/payment/delete/{id}", a.DeletePayment)
 	a.Get("/payments", a.GetAllPayments)
+	//routing for handling Boxes
+	a.Post("/box/post", a.CreateBoxes)
+	a.Get("/box/{id}", a.GetBoxes)
+	a.Put("/box/edit/{id}", a.UpdateBoxes)
+	a.Delete("/box/delete/{id}", a.DeleteBoxes)
+	a.Get("/boxes", a.GetAllBoxes)
+	a.Post("/box/upload", a.UploadBox)
+	//routing for handling Boxes
+	a.Post("/boxpaper/post", a.CreateBoxpaper)
+	a.Get("/boxpaper/{id}", a.GetBoxpaper)
+	a.Put("/boxpaper/edit/{id}", a.UpdateBoxpaper)
+	a.Delete("/boxpaper/delete/{id}", a.DeleteBoxpaper)
+	a.Get("/boxpapers", a.GetAllBoxpaper)
+	a.Post("/boxpaper/upload", a.UploadPaper)
+	//routing for handling Boxes
+	a.Post("/ribbon/post", a.CreateRibbon)
+	a.Get("/ribbon/{id}", a.GetRibbon)
+	a.Put("/ribbon/edit/{id}", a.UpdateRibbon)
+	a.Delete("/ribbon/delete/{id}", a.DeleteRibbon)
+	a.Get("/ribbons", a.GetAllRibbon)
+	a.Post("/ribbon/upload", a.UploadRibbon)
 }
 
 // Wrap the router for GET method
@@ -159,6 +188,10 @@ func (a *App) Register(w http.ResponseWriter, r *http.Request) {
 	handler.Register(a.DB, w, r)
 }
 
+func (a *App) UploadUser(w http.ResponseWriter, r *http.Request) {
+	handler.UploadUser(a.DB, w, r)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Handlers to manage Seller Data
 func (a *App) CreateSeller(w http.ResponseWriter, r *http.Request) {
@@ -177,6 +210,10 @@ func (a *App) DeleteSeller(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteSeller(a.DB, w, r)
 }
 
+func (a *App) UploadSeller(w http.ResponseWriter, r *http.Request) {
+	handler.UploadSeller(a.DB, w, r)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Handlers to manage Buyer Data
 func (a *App) CreateBuyer(w http.ResponseWriter, r *http.Request) {
@@ -193,6 +230,10 @@ func (a *App) UpdateBuyer(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) DeleteBuyer(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteBuyer(a.DB, w, r)
+}
+
+func (a *App) GetAddressByUser(w http.ResponseWriter, r *http.Request) {
+	handler.GetAddressByUser(a.DB, w, r)
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -221,6 +262,13 @@ func (a *App) GetProductBySeller(w http.ResponseWriter, r *http.Request) {
 	handler.GetProductBySeller(a.DB, w, r)
 }
 
+func (a *App) UploadProduct(w http.ResponseWriter, r *http.Request) {
+	handler.UploadProduct(a.DB, w, r)
+}
+func (a *App) Pencarian(w http.ResponseWriter, r *http.Request) {
+	handler.Pencarian(a.DB, w, r)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Handlers to manage Transaction Data
 func (a *App) CreateTransaction(w http.ResponseWriter, r *http.Request) {
@@ -245,6 +293,10 @@ func (a *App) GetAllTransactions(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) GetTransactionBySeller(w http.ResponseWriter, r *http.Request) {
 	handler.GetTransactionBySeller(a.DB, w, r)
+}
+
+func (a *App) ProductArrived(w http.ResponseWriter, r *http.Request) {
+	handler.ProductArrived(a.DB, w, r)
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -299,6 +351,10 @@ func (a *App) GetInvoiceByBuyer(w http.ResponseWriter, r *http.Request) {
 	handler.GetInvoiceByBuyer(a.DB, w, r)
 }
 
+func (a *App) UploadInvoice(w http.ResponseWriter, r *http.Request) {
+	handler.UploadInvoice(a.DB, w, r)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Handlers to manage Payment Data
 func (a *App) CreatePayment(w http.ResponseWriter, r *http.Request) {
@@ -319,6 +375,83 @@ func (a *App) DeletePayment(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) GetAllPayments(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllPayments(a.DB, w, r)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Handlers to manage Payment Data
+func (a *App) CreateBoxes(w http.ResponseWriter, r *http.Request) {
+	handler.CreateBoxes(a.DB, w, r)
+}
+
+func (a *App) GetBoxes(w http.ResponseWriter, r *http.Request) {
+	handler.GetBoxes(a.DB, w, r)
+}
+
+func (a *App) UpdateBoxes(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateBoxes(a.DB, w, r)
+}
+
+func (a *App) DeleteBoxes(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteBoxes(a.DB, w, r)
+}
+
+func (a *App) GetAllBoxes(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllBoxes(a.DB, w, r)
+}
+
+func (a *App) UploadBox(w http.ResponseWriter, r *http.Request) {
+	handler.UploadBox(a.DB, w, r)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Handlers to manage Payment Data
+func (a *App) CreateBoxpaper(w http.ResponseWriter, r *http.Request) {
+	handler.CreateBoxpaper(a.DB, w, r)
+}
+
+func (a *App) GetBoxpaper(w http.ResponseWriter, r *http.Request) {
+	handler.GetBoxpaper(a.DB, w, r)
+}
+
+func (a *App) UpdateBoxpaper(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateBoxpaper(a.DB, w, r)
+}
+
+func (a *App) DeleteBoxpaper(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteBoxpaper(a.DB, w, r)
+}
+
+func (a *App) GetAllBoxpaper(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllBoxpaper(a.DB, w, r)
+}
+
+func (a *App) UploadPaper(w http.ResponseWriter, r *http.Request) {
+	handler.UploadPaper(a.DB, w, r)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Handlers to manage Payment Data
+func (a *App) CreateRibbon(w http.ResponseWriter, r *http.Request) {
+	handler.CreateRibbon(a.DB, w, r)
+}
+
+func (a *App) GetRibbon(w http.ResponseWriter, r *http.Request) {
+	handler.GetRibbon(a.DB, w, r)
+}
+
+func (a *App) UpdateRibbon(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateRibbon(a.DB, w, r)
+}
+
+func (a *App) DeleteRibbon(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteRibbon(a.DB, w, r)
+}
+
+func (a *App) GetAllRibbon(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllRibbon(a.DB, w, r)
+}
+func (a *App) UploadRibbon(w http.ResponseWriter, r *http.Request) {
+	handler.UploadRibbon(a.DB, w, r)
 }
 
 // Run the app on it's router
