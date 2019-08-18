@@ -122,7 +122,9 @@ func Pencarian(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	tengah := fmt.Sprintf("%%%s%%", search)
 	akhir := fmt.Sprintf("%s%%", search)
 	fmt.Println(awal, tengah, akhir)
-	if err := db.Where("nama LIKE ?", awal).Or("nama LIKE ?", tengah).Or("nama LIKE ?", akhir).Order("terjual desc").Order("dilihat desc").Find(&products).Error; err != nil {
+	if err := db.Where("nama LIKE ?", awal).Or("nama LIKE ?", tengah).
+	Or("nama LIKE ?", akhir).Order("terjual desc").Order("dilihat desc").
+	Find(&products).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

@@ -31,7 +31,8 @@ type Account struct {
 
 type SellerModel struct {
 	gorm.Model
-	AccountID    uint   `gorm:"unique" json:"account_id"`
+	AccountID    uint `gorm:"unique" json:"account_id"`
+	Nama         string
 	Username     string `gorm:"unique"` //wajib
 	Alamat       string //wajib
 	Logo         string
@@ -59,18 +60,19 @@ type BuyerModel struct {
 }
 type ProductModel struct {
 	gorm.Model
-	SellerID uint `json:"seller_id"`
-	Kategori int
-	Nama     string
-	Harga    float32 `sql:"type:decimal(10,2);"`
-	Stok     int
-	Terjual  int
-	Dilihat  int
-	Berat    float32 `sql:"type:decimal(10,2);"`
-	Length   float32 `sql:"type:decimal(10,2);"`
-	Width    float32 `sql:"type:decimal(10,2);"`
-	Height   float32 `sql:"type:decimal(10,2);"`
-	PathFoto string
+	SellerID  uint `json:"seller_id"`
+	Kategori  uint
+	Nama      string
+	Harga     float32 `sql:"type:decimal(10,2);"`
+	Stok      int
+	Terjual   int
+	Dilihat   int
+	Berat     float32 `sql:"type:decimal(10,2);"`
+	Length    float32 `sql:"type:decimal(10,2);"`
+	Width     float32 `sql:"type:decimal(10,2);"`
+	Height    float32 `sql:"type:decimal(10,2);"`
+	Deskripsi string
+	PathFoto  string
 }
 
 type TransactionModel struct {
@@ -155,5 +157,7 @@ func DBMigrate(db *gorm.DB) *gorm.DB {
 	db.Model(&InvoiceModel{}).AddForeignKey("transaction_id", "transaction_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&InvoiceModel{}).AddForeignKey("buyyer_id", "buyer_models(id)", "RESTRICT", "RESTRICT")
 	db.Model(&InvoiceModel{}).AddForeignKey("payment_id", "payment_models(id)", "RESTRICT", "RESTRICT")
+	// db.Model(&ProductModel{}).AddForeignKey("kategori", "kategoris(id)", "RESTRICT", "RESTRICT")
+
 	return db
 }

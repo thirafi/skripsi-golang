@@ -16,9 +16,9 @@ account := model.Account{} <---bikin model
 <---- baru bisa di ubah isi dari account
 
 ##status berhasil 
-1.StatusCreated -->
-2.StatusOK -->
-3.StatusNoContent --> 201 berhasil menghapus
+1.StatusCreated --> 201
+2.StatusOK --> 200
+3.StatusNoContent --> 204 berhasil menghapus
 ##status error yg digunakan
 1. StatusBadRequest --> 400 
 2. StatusInternalServerError -->
